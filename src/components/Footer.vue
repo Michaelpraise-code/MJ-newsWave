@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <footer class="bg-dark text-white py-4 mt-5">
+  <footer class="bg-dark text-white py-4 mt-5 container-fluid">
     <div class="container text-center">
       <p class="mb-3">© 2025 MJ NewsWave. All rights reserved.</p>
       <div class="d-flex justify-content-center gap-3">
