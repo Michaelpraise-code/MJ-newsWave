@@ -1,38 +1,84 @@
+<template>
+  <div class="container">
+    <marquee class="marquee" behavior="slide" direction="up">
+      <h2 class="text text-center text-white mt-5">Welcome to MJ NewsWave</h2>
+      <p class="text text-center text-white mb-5">Your source for latest news!</p>
+    </marquee>
+    <h2 class="mb-4">Headline News</h2>
+    <div v-if="loading" class="text-center mb-4">
+      <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <div v-else-if="error" class="alert alert-danger mt-4">
+      {{ error }}
+    </div>
+    <div v-else-if="headlineNews && Object.keys(headlineNews).length">
+      <NewsCard :news="headlineNews" />
+    </div>
+    <div v-else class="alert alert-warning mt-4">
+      No headline news available.
+    </div>
+
+    <h2 class="my-4">Latest News</h2>
+    <div v-if="loading" class="text-center mb-4">
+      <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <div v-else-if="error" class="alert alert-danger mt-4">
+      {{ error }}
+    </div>
+    <div class="row" v-else>
+      <div
+        v-for="news in filteredNews"
+        :key="news.uuid || Math.random()"
+        class="col-md-4"
+      >
+        <NewsCard :news="news" />
+      </div>
+    </div>
+    
+      No news articles found.
+    </div>
+  
+</template>
+
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useStore } from 'vuex'
-import NewsCard from '@/components/NewsCard.vue'
+import { onMounted } from 'vue';
+import { useStore } from 'vuex';
+import { computed } from 'vue';
+import NewsCard from '@/components/NewsCard.vue';
 
-const store = useStore()
+const store = useStore();
 
-// Fetch all news and headline news on component mount
 onMounted(() => {
-  store.dispatch('fetchAllNews')
-  store.dispatch('fetchHeadlineNews')
-})
+  console.log('Mounted: Fetching news...');
+  console.log('Initial store state:', store.state);
+  store.dispatch('fetchHeadlineNews').catch(err => console.error('fetchHeadlineNews error:', err));
+  store.dispatch('fetchAllNews').catch(err => console.error('fetchAllNews error:', err));
+});
 
+const headlineNews = computed(() => {
+  const news = store.state.headlineNews;
+  console.log('Headline News:', news);
+  return news;
+});
 
-// Get news and headline from store
-const news = store.state.news
-const headline = store.state.headline
+const filteredNews = computed(() => {
+  const news = store.getters.filteredNews;
+  console.log('Filtered News:', news);
+  return news;
+});
+
+const loading = computed(() => {
+  const isLoading = store.state.loading;
+  console.log('Loading:', isLoading);
+  return isLoading;
+});
+
+const error = computed(() => store.state.error);
 </script>
 
-<!-- views/HomeView.vue -->
-<template>
-  <div class="container mt-4">
-    <h1 class="text-center mb-4">Welcome to MJ NewsWave</h1>
-
-    <!-- Headline News -->
-    <div v-if="headline" class="mb-4">
-      <h2>Headline News</h2>
-      <news-card :news="headline" />
-    </div>
-<!--  -->
-
-    <!-- Loading or Empty State -->
-    <div v-else>
-      <p>Loading news...</p>
-    </div>
-  </div>
-  <NewsCard />
-</template>
+<style scoped>
+.marquee {
+  background-image: url(src/assets/images/tech2.jpg);
+  font-family: Georgia, serif;
+}
+</style>

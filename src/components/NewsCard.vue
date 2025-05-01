@@ -1,34 +1,43 @@
-<script setup>
-import { computed, defineProps, onMounted } from 'vue'
-import { createStore } from 'vuex'
-import {useStore} from 'vuex'
-const store = useStore();
-const news = computed   (()=>{
-  store.state.allNews
-})
-onMounted(async()=>{
-  await store.dispatch('fetchAllNews')
-})
-// Define the props for the component
-const props = defineProps({
-  news: {
-    type: Object,
-    required: true,
-  },
-})
-</script>
 <template>
-  <div class="col-md-4 mb-4">
-    <div class="card">
-      <img v-if="news.image_url" :src="news.image_url" class="card-img-top" alt="News Image" />
-      <div class="card-body">
-        <h5 class="card-title">{{ news.title }}</h5>
-        <p class="card-text">{{ news.description }}</p>
-        <p class="card-text">
-          <small class="text-muted">Published on: {{ news.published_at }}</small>
-        </p>
-        <router-link :to="`/news/${news.uuid}`" class="btn btn-primary">Read More</router-link>
-      </div>
+  <div class="card h-100">
+    <img
+      :src="news.image_url || 'https://via.placeholder.com/150'"
+      class="card-img-top"
+      alt="News Image"
+      @error="handleImageError"
+    />
+    <div class="card-body">
+      <h5 class="card-title">{{ news.title || 'No Title' }}</h5>
+      <p class="card-text">{{ news.description || 'No Description' }}</p>
+      <router-link
+        :to="news.uuid ? `/news/${news.uuid}` : '#'"
+        class="btn btn-primary"
+        :class="{ disabled: !news.uuid }"
+      >
+        Read More
+      </router-link>
     </div>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  news: {
+    type: Object,
+    required: true,
+    validator: (news) => {
+      const requiredProps = ['uuid', 'title', 'description', 'image_url'];
+      const hasRequiredProps = requiredProps.every((prop) => prop in news);
+      if (!hasRequiredProps) {
+        console.warn('News object missing required properties:', news);
+      }
+      return hasRequiredProps;
+    },
+  },
+});
+
+function handleImageError(event) {
+  event.target.src = 'https://via.placeholder.com/150';
+  console.warn('Failed to load image:', event.target.src);
+}
+</script>
