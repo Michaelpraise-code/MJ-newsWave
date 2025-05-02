@@ -47,7 +47,7 @@ import image from '../assets/images/image.jpg'
       </div>
     </nav>
   </div>
-  <div class="container-fluid alert alert-secondary">
+  <div class="container-fluid">
     <RouterView />
   </div>
 </template>

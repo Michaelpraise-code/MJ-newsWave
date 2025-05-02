@@ -1,43 +1,73 @@
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   news: {
     type: Object,
-    required: true,
-    validator: (news) => {
-      const requiredProps = ['uuid', 'title', 'description', 'image_url']
-      const hasRequiredProps = requiredProps.every((prop) => prop in news)
-      if (!hasRequiredProps) {
-        console.warn('News object missing required properties:', news)
-      }
-      return hasRequiredProps
-    },
-  },
+    required: true
+  }
 })
 
-function handleImageError(event) {
-  event.target.src = 'https://via.placeholder.com/150'
-  console.warn('Failed to load image:', event.target.src)
-}
+const truncatedTitle = computed(() => {
+  const title = props.news.title || 'Untitled'
+  return title.length > 60 ? title.slice(0, 60) + '...' : title
+})
+
+const truncatedDescription = computed(() => {
+  const desc = props.news.description || 'No description available.'
+  return desc.length > 100 ? desc.slice(0, 100) + '...' : desc
+})
 </script>
 
 <template>
-  <div class="card h-100">
+  <div class="card h-100 shadow-sm border-0">
     <img
-      :src="news.image_url || 'https://via.placeholder.com/150'"
+      :src="news.image_url || '/placeholder.jpg'"
       class="card-img-top"
-      alt="News Image"
+      :alt="news.title"
       @error="handleImageError"
     />
     <div class="card-body">
-      <h5 class="card-title">{{ news.title || 'No Title' }}</h5>
-      <p class="card-text">{{ news.description || 'No Description' }}</p>
+      <h5 class="card-title">{{ truncatedTitle }}</h5>
+      <p class="card-text text-muted">{{ truncatedDescription }}</p>
       <router-link
-        :to="news.uuid ? `/news/${news.uuid}` : '#'"
-        class="btn btn-primary"
-        :class="{ disabled: !news.uuid }"
+        :to="`/news/${news.uuid}`"
+        class="btn btn-danger stretched-link"
       >
         Read More
       </router-link>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    handleImageError(event) {
+      event.target.src = '/placeholder.jpg'
+    }
+  }
+}
+</script>
+
+<style scoped>
+.card {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+</style>
