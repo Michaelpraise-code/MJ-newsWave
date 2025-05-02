@@ -1,12 +1,64 @@
+<script setup>
+import { onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+import NewsCard from '@/components/NewsCard.vue'
+
+const store = useStore()
+
+onMounted(async () => {
+  console.log('Mounted: Fetching news...')
+  console.log('Initial store state:', store.state)
+  store.dispatch('fetchHeadlineNews').catch((err) => console.error('fetchHeadlineNews error:', err))
+  store.dispatch('fetchAllNews').catch((err) => console.error('fetchAllNews error:', err))
+  await store.dispatch('fetchAllNews')
+})
+
+const headlineNews = computed(() => {
+  const news = store.state.headlineNews
+  console.log('Headline News:', news)
+  return news
+})
+const allNews = computed(() => store.state.allNews)
+
+const filteredNews = computed(() => {
+  const news = store.getters.filteredNews
+  console.log('Filtered News:', news)
+  return news
+})
+
+const loading = computed(() => {
+  const isLoading = store.state.loading
+  console.log('Loading:', isLoading)
+  return isLoading
+})
+
+const error = computed(() => store.state.error)
+</script>
+
 <template>
   <div class="container">
     <marquee class="marquee" behavior="slide" direction="up">
       <h2 class="text text-center text-white mt-5">Welcome to MJ NewsWave</h2>
       <p class="text text-center text-white mb-5">Your source for latest news!</p>
     </marquee>
+    <div>
+      <h2 class="text-center">All News</h2>
+      <div v-if="allNews && allNews.length">
+        <div v-for="news in allNews" :key="news.uuid || Math.random()" class="card mb-3">
+          <h3>Title: {{ news.title }}</h3>
+          <img :src="news.image_url" alt="News Image" class="img-fluid" />
+          <router-link :to="`/news/${news.uuid}`" class="btn btn-primary mt-2">
+            Read More
+          </router-link>
+        </div>
+      </div>
+    </div>
     <h2 class="mb-4">Headline News</h2>
     <div v-if="loading" class="text-center mb-4">
-      <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
     <div v-else-if="error" class="alert alert-danger mt-4">
       {{ error }}
@@ -14,67 +66,26 @@
     <div v-else-if="headlineNews && Object.keys(headlineNews).length">
       <NewsCard :news="headlineNews" />
     </div>
-    <div v-else class="alert alert-warning mt-4">
-      No headline news available.
-    </div>
+    <div v-else class="alert alert-warning mt-4">No headline news available.</div>
 
     <h2 class="my-4">Latest News</h2>
     <div v-if="loading" class="text-center mb-4">
-      <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
     <div v-else-if="error" class="alert alert-danger mt-4">
       {{ error }}
     </div>
     <div class="row" v-else>
-      <div
-        v-for="news in filteredNews"
-        :key="news.uuid || Math.random()"
-        class="col-md-4"
-      >
+      <div v-for="news in filteredNews" :key="news.uuid || Math.random()" class="col-md-4">
         <NewsCard :news="news" />
       </div>
     </div>
-    
-      No news articles found.
-    </div>
-  
+
+    No news articles found.
+  </div>
 </template>
-
-<script setup>
-import { onMounted } from 'vue';
-import { useStore } from 'vuex';
-import { computed } from 'vue';
-import NewsCard from '@/components/NewsCard.vue';
-
-const store = useStore();
-
-onMounted(() => {
-  console.log('Mounted: Fetching news...');
-  console.log('Initial store state:', store.state);
-  store.dispatch('fetchHeadlineNews').catch(err => console.error('fetchHeadlineNews error:', err));
-  store.dispatch('fetchAllNews').catch(err => console.error('fetchAllNews error:', err));
-});
-
-const headlineNews = computed(() => {
-  const news = store.state.headlineNews;
-  console.log('Headline News:', news);
-  return news;
-});
-
-const filteredNews = computed(() => {
-  const news = store.getters.filteredNews;
-  console.log('Filtered News:', news);
-  return news;
-});
-
-const loading = computed(() => {
-  const isLoading = store.state.loading;
-  console.log('Loading:', isLoading);
-  return isLoading;
-});
-
-const error = computed(() => store.state.error);
-</script>
 
 <style scoped>
 .marquee {

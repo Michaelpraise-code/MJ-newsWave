@@ -1,3 +1,25 @@
+<script setup>
+defineProps({
+  news: {
+    type: Object,
+    required: true,
+    validator: (news) => {
+      const requiredProps = ['uuid', 'title', 'description', 'image_url']
+      const hasRequiredProps = requiredProps.every((prop) => prop in news)
+      if (!hasRequiredProps) {
+        console.warn('News object missing required properties:', news)
+      }
+      return hasRequiredProps
+    },
+  },
+})
+
+function handleImageError(event) {
+  event.target.src = 'https://via.placeholder.com/150'
+  console.warn('Failed to load image:', event.target.src)
+}
+</script>
+
 <template>
   <div class="card h-100">
     <img
@@ -19,25 +41,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-defineProps({
-  news: {
-    type: Object,
-    required: true,
-    validator: (news) => {
-      const requiredProps = ['uuid', 'title', 'description', 'image_url'];
-      const hasRequiredProps = requiredProps.every((prop) => prop in news);
-      if (!hasRequiredProps) {
-        console.warn('News object missing required properties:', news);
-      }
-      return hasRequiredProps;
-    },
-  },
-});
-
-function handleImageError(event) {
-  event.target.src = 'https://via.placeholder.com/150';
-  console.warn('Failed to load image:', event.target.src);
-}
-</script>

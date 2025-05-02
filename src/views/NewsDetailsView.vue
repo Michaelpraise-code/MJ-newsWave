@@ -1,39 +1,39 @@
+<script setup>
+import { onMounted, computed, ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
+
+const store = useStore()
+const route = useRoute()
+
+const loading = ref(false)
+
+const selectedNews = computed(() => store.state.selectedNews)
+
+onMounted(async () => {
+  loading.value = true
+  await store.dispatch('fetchNewsByUuid', route.params.uuid)
+  loading.value = false
+})
+</script>
+
 <template>
-  <div class="container">
-    <div v-if="loading" class="text-center my-5">
-      <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+  <div class="container mt-5">
+    <div v-if="loading" class="text-center">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden"> loading....</span>
+      </div>
     </div>
-
-    <div v-else-if="news">
-      <h2 class="mb-3">{{ news.title }}</h2>
-      <img :src="news.image_url" class="img-fluid rounded mb-3" alt="news image" />
-      <p class="text-muted">
-        Published: {{ news.published_at }} | Source: {{ news.source }} | Categories:
-        <!-- {{ news.categories.join(', ') }} -->
-      </p>
-      <p>{{ news.description }}</p>
-      <a :href="news.url" class="btn btn-primary" target="_blank">Read Full Article</a>
+    <div v-else-if="selectedNews">
+      <img :src="selectedNews.image_url" class="img-fluid mb-3" :alt="selectedNews.title" />
+      <h1>{{ selectedNews.title }}</h1>
+      <p><strong>published:</strong>{{ selectedNews.published_at }}</p>
+      <p><strong>source:</strong>{{ selectedNews.source }}</p>
+      <p>{{ selectedNews.description }}</p>
+      <a :href="selectedNews.url" target="_blank" class="btn btn-primary"> Read Full Article</a>
     </div>
-
-    <div v-else class="alert alert-danger mt-4">
-      News article not found.
+    <div v-else>
+      <p>News not found.</p>
     </div>
   </div>
 </template>
-
-<script setup>
-import { onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
-
-const route = useRoute()
-const store = useStore()
-const uuid = route.params.uuid
-
-onMounted(() => {
-  store.dispatch(' fetchNewsByUuid', uuid)
-})
-
-const news = computed(() => store.state.selectedNews)
-const loading = computed(() => store.state.loading)
-</script>

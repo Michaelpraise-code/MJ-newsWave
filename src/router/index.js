@@ -26,11 +26,11 @@ const router = createRouter({
       name: 'Category',
       component: () => import('../views/NewsCategoryView.vue'),
     },
-      {
-        path: '/news/:uuid',
-        name: 'NewsDetail',
-        component: NewsDetailsView
-      },
+    {
+      path: '/news/:uuid',
+      name: 'NewsDetails',
+      component: NewsDetailsView,
+    },
   ],
 })
 

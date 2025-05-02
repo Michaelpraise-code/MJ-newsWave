@@ -1,6 +1,6 @@
 <script setup></script>
 <template>
-  <div class="container mt-4">
+  <div class="container-fluid mt-4">
     <div class="">
       <h2 class="welcome text text-center">About MJ NewsWave</h2>
       <p id="about1" class="text text-center">
@@ -68,8 +68,8 @@
 .welcome {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
-/* #about1{
-  background-image: url( src/assets/images/about.jpg );
-  background-color: coral;
-} */
+.container-fluid{
+  background-image:url( src/assets/images/about.jpg ) ;
+  width: 1300px;
+}
 </style>
