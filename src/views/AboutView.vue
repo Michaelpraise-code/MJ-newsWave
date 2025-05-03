@@ -15,7 +15,7 @@ const coreValues = ref([
 </script>
 
 <template>
-  <div class="about-container">
+  <div class="container-fluid">
     <!-- Hero Section -->
     <section class="hero-section text-center">
       <div class="hero-overlay">

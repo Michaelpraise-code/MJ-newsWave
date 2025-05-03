@@ -67,7 +67,7 @@ const submitForm = async (event) => {
 </script>
 
 <template>
-  <div class="contact-container">
+  <div class="container-fluid">
     <div class="contact-card">
       <h1 class="contact-title">Get in Touch</h1>
       <p class="contact-intro">
