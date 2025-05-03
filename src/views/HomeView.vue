@@ -14,10 +14,7 @@ onMounted(async () => {
   console.log('Mounted: Fetching news...')
   console.log('Initial store state:', store.state)
   try {
-    await Promise.all([
-      store.dispatch('fetchHeadlineNews'),
-      store.dispatch('fetchAllNews')
-    ])
+    await Promise.all([store.dispatch('fetchHeadlineNews'), store.dispatch('fetchAllNews')])
   } catch (err) {
     console.error('Error fetching news:', err)
   }
@@ -51,8 +48,10 @@ const error = computed(() => store.state.error)
     <!-- Hero Section -->
     <section class="hero text-center text-white d-flex align-items-center justify-content-center">
       <div>
-        <h1 class="display-4 fw-bold">Welcome to MJ NewsWave</h1>
-        <p class="lead">Your trusted source for the latest news!</p>
+        <marquee behavior="slide" direction="up">
+          <h1 class="display-4 fw-bold text-center">Welcome to MJ NewsWave</h1>
+          <p class="lead">Your trusted source for the latest news!</p>
+        </marquee>
       </div>
     </section>
 
@@ -89,10 +88,7 @@ const error = computed(() => store.state.error)
                   <p class="card-text text-muted">
                     {{ truncateDescription(news.description, 100) }}
                   </p>
-                  <router-link
-                    :to="`/news/${news.uuid}`"
-                    class="btn btn-danger stretched-link"
-                  >
+                  <router-link :to="`/news/${news.uuid}`" class="btn btn-danger stretched-link">
                     Read More
                   </router-link>
                 </div>
@@ -119,9 +115,7 @@ const error = computed(() => store.state.error)
           </button>
         </div>
       </div>
-      <div v-else class="alert alert-warning text-center">
-        No headline news available.
-      </div>
+      <div v-else class="alert alert-warning text-center">No headline news available.</div>
     </section>
 
     <!-- Latest News Grid -->
@@ -145,9 +139,7 @@ const error = computed(() => store.state.error)
           <NewsCard :news="news" />
         </div>
       </div>
-      <div v-else class="alert alert-warning text-center">
-        No news articles found.
-      </div>
+      <div v-else class="alert alert-warning text-center">No news articles found.</div>
     </section>
 
     <!-- All News Section -->
@@ -187,9 +179,7 @@ const error = computed(() => store.state.error)
           </div>
         </div>
       </div>
-      <div v-else class="alert alert-warning text-center">
-        No news articles found.
-      </div>
+      <div v-else class="alert alert-warning text-center">No news articles found.</div>
     </section>
   </div>
 </template>
@@ -202,7 +192,7 @@ export default {
       try {
         await Promise.all([
           this.$store.dispatch('fetchHeadlineNews'),
-          this.$store.dispatch('fetchAllNews')
+          this.$store.dispatch('fetchAllNews'),
         ])
       } catch (err) {
         console.error('Retry error:', err)
@@ -215,23 +205,20 @@ export default {
     // Truncate text for display
     truncateDescription(text, maxLength) {
       if (!text) return 'No description available.'
-      return text.length > maxLength
-        ? text.slice(0, maxLength) + '...'
-        : text
+      return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
     },
     truncateTitle(text, maxLength) {
       if (!text) return 'Untitled'
-      return text.length > maxLength
-        ? text.slice(0, maxLength) + '...'
-        : text
-    }
-  }
+      return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
+    },
+  },
 }
 </script>
 
 <style scoped>
 .hero {
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
     url('/src/assets/images/tech2.jpg') center/cover no-repeat;
   height: 400px;
 }
@@ -244,7 +231,9 @@ export default {
   object-fit: cover;
 }
 .card {
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 .card:hover {
   transform: translateY(-5px);

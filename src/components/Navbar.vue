@@ -57,4 +57,19 @@ import image from '../assets/images/image.jpg'
   width: 80px;
   border-radius: 50px;
 }
+@media (max-width: 992px) {
+  .logo {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  .logo {
+    display: none;
+  }
+}
+@media (max-width: 576px) {
+  .logo {
+    display: none;
+  }
+}
 </style>
