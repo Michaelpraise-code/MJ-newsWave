@@ -29,7 +29,7 @@ const coreValues = ref([
     <!-- Welcome Section -->
     <section class="section container">
       <h2 class="section-title text-center">Our Story</h2>
-      <p class="section-text">
+      <p class="section-text text center">
         Welcome to MJ NewsWave, where stories come to life and facts lead the way. In a world
         overflowing with information, we stand for clarity, accuracy, and integrity. Our mission is
         simple but powerful: to deliver news that informs, empowers, and connects. Founded on the

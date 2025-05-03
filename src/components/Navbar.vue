@@ -54,9 +54,9 @@ const handleKeydown = (event) => {
           <RouterLink to="/" class="fw-bold text-white text-decoration-none">MJ NewsWave</RouterLink>
         </div>
         <button
-        
           class="menu-toggle"
           @click="toggleMenu"
+          :aria-expanded="isMenuOpen"
           aria-label="Toggle navigation"
         >
           <font-awesome-icon :icon="isMenuOpen ? 'times' : 'bars'" />
@@ -146,6 +146,8 @@ const handleKeydown = (event) => {
 :root {
   --primary-color: #007bff; /* Blue primary color */
   --secondary-color: #17a2b8; /* Complementary blue shade */
+  --toggle-bg: rgba(255, 255, 255, 0.1); /* Toggle background */
+  --toggle-hover-bg: rgba(255, 255, 255, 0.2); /* Toggle hover background */
 }
 
 .navbar {
@@ -259,11 +261,36 @@ const handleKeydown = (event) => {
 
 .menu-toggle {
   display: none;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #fff;
+  background: var(--toggle-bg);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  padding: 0.5rem;
+  font-size: 1.4rem;
+  color: rgba(255, 255, 255, 0.95); /* Slightly off-white for contrast */
   cursor: pointer;
+  transition: all 0.3s ease;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-toggle:hover {
+  background: black;
+  color: black;
+  transform: scale(1.1);
+}
+
+.menu-toggle:active,
+.menu-toggle[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--primary-color);
+}
+
+.menu-toggle:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 .search-desktop {
@@ -277,7 +304,7 @@ const handleKeydown = (event) => {
 /* Small screens (mobile, up to 768px) */
 @media (max-width: 768px) {
   .menu-toggle {
-    display: block;
+    display: flex;
   }
 
   .nav-links {

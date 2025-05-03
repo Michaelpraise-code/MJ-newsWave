@@ -73,7 +73,7 @@ const carouselSlides = computed(() => {
 </script>
 
 <template>
-  <div class="container my-5 animate-section">
+  <div class="container-fluid my-5 animate-section">
     <!-- Headline News Carousel -->
     <div
       id="newsCarousel"
