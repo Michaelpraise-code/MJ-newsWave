@@ -61,7 +61,7 @@ const handleKeydown = (event) => {
         >
           <font-awesome-icon :icon="isMenuOpen ? 'times' : 'bars'" />
         </button>
-        <ul class="nav-links" :class="{ 'nav-links-open': isMenuOpen }">
+        <ul class="nav-links bg-dark" :class="{ 'nav-links-open': isMenuOpen }">
           <li class="nav-item">
             <RouterLink class="nav-link" to="/" @click="closeMenu" aria-label="Home">
               <font-awesome-icon icon="home" class="nav-icon" /> Home
@@ -277,8 +277,8 @@ const handleKeydown = (event) => {
 }
 
 .menu-toggle:hover {
-  background: black;
-  color: black;
+  background: var(--toggle-hover-bg);
+  color: var(--secondary-color);
   transform: scale(1.1);
 }
 
